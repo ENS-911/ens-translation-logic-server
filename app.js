@@ -1,7 +1,6 @@
 const { Client } = require('pg');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
-
 dotenv.config();
 
 const databaseConfig = {
@@ -50,8 +49,6 @@ async function processDatabaseRow(row) {
     } else {
       console.error(`No Lambda function defined for database type: ${databaseType}`);
     }
-  } else {
-    console.log(`Bypassing row due to dbsync value: ${dbSync}`);
   }
 }
 
