@@ -22,10 +22,9 @@ const postgresClient = new Client(databaseConfig);
 const lambda = new AWS.Lambda(lambdaConfig);
 
 const databaseTypeToLambdaMap = {
-  'mssql': 'lambda_function_name_1',
-  'mysql': 'lambda_function_name_2',
-  'pg': 'lambda_function_name_3',
-  // Add more types as needed
+  'mssql': 'lambda_translator_mssql',
+  'mysql': 'lambda_translator_mysql',
+  'pg': 'lambda_translator_pg',
 };
 
 async function processDatabaseRow(row) {
@@ -60,7 +59,7 @@ async function main() {
   try {
     await postgresClient.connect();
 
-    const queryResult = await postgresClient.query('SELECT * FROM your_table');
+    const queryResult = await postgresClient.query('SELECT * FROM clients');
 
     for (const row of queryResult.rows) {
       await processDatabaseRow(row);
