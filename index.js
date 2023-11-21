@@ -9,6 +9,7 @@ const databaseConfig = {
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  max: 10, // Adjust as needed for connection pooling
 };
 
 const lambdaConfig = {
@@ -27,27 +28,22 @@ const databaseTypeToLambdaMap = {
 };
 
 async function processDatabaseRow(row) {
-  const databaseType = row.db_type;
-  const dbSync = row.dbsync;
+  const { db_type, dbsync } = row;
 
-  if (dbSync.toLowerCase() === 'yes') {
-    if (databaseTypeToLambdaMap.hasOwnProperty(databaseType)) {
-      const lambdaFunctionName = databaseTypeToLambdaMap[databaseType];
+  if (dbsync.toLowerCase() === 'yes' && databaseTypeToLambdaMap.hasOwnProperty(db_type)) {
+    const lambdaFunctionName = databaseTypeToLambdaMap[db_type];
+    const lambdaParams = {
+      FunctionName: lambdaFunctionName,
+      InvocationType: 'RequestResponse',
+      Payload: JSON.stringify(row),
+    };
 
-      const lambdaParams = {
-        FunctionName: lambdaFunctionName,
-        InvocationType: 'RequestResponse',
-        Payload: JSON.stringify(row),
-      };
-
-      try {
-        const lambdaResponse = await lambda.invoke(lambdaParams).promise();
-        console.log('Lambda Response:', lambdaResponse);
-      } catch (error) {
-        console.error('Error invoking Lambda function:', error);
-      }
-    } else {
-      console.error(`No Lambda function defined for database type: ${databaseType}`);
+    try {
+      const lambdaResponse = await lambda.invoke(lambdaParams).promise();
+      console.log('Lambda Response:', lambdaResponse);
+    } catch (error) {
+      console.error('Error invoking Lambda function:', error);
+      // Log the error and continue with the next row
     }
   }
 }
@@ -57,10 +53,7 @@ async function main() {
     await postgresClient.connect();
 
     const queryResult = await postgresClient.query('SELECT * FROM clients');
-
-    for (const row of queryResult.rows) {
-      await processDatabaseRow(row);
-    }
+    await Promise.all(queryResult.rows.map(processDatabaseRow));
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error);
   } finally {
@@ -68,4 +61,7 @@ async function main() {
   }
 }
 
-main();
+exports.handler = async (event, context) => {
+  await main();
+  return { statusCode: 200, body: 'Execution completed.' };
+};
