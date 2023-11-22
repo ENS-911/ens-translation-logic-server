@@ -21,17 +21,6 @@ async function processDatabaseRow(row) {
   const { db_type, dbsync } = row;
 
   if (dbsync.toLowerCase() === 'yes' && databaseTypeToLambdaMap.hasOwnProperty(db_type)) {
-    const databaseConfig = {
-      user: 'ensclient',
-      host: 'ens-client.cfzb4vlbttqg.us-east-2.rds.amazonaws.com',
-      database: 'ens-client',
-      password: 'gQ9Sf8cIczKhZiCswXXy',
-      port: 5432,
-      max: 10, // Adjust as needed for connection pooling
-    };
-
-    const postgresClient = new Client(databaseConfig);
-
     const lambdaFunctionName = databaseTypeToLambdaMap[db_type];
     const lambdaParams = {
       FunctionName: lambdaFunctionName,
@@ -40,21 +29,27 @@ async function processDatabaseRow(row) {
     };
 
     try {
-      await postgresClient.connect();
 
       const lambdaResponse = await lambda.invoke(lambdaParams).promise();
       console.log('Lambda Response:', lambdaResponse);
     } catch (error) {
       console.error('Error invoking Lambda function:', error);
       // Log the error and continue with the next row
-    } finally {
-      await postgresClient.end();
     }
   }
 }
 
 async function main() {
-  const postgresClient = new Client(); // Create a new client instance for the main function
+  const databaseConfig = {
+    user: 'ensclient',
+    host: 'ens-client.cfzb4vlbttqg.us-east-2.rds.amazonaws.com',
+    database: 'ens-client',
+    password: 'gQ9Sf8cIczKhZiCswXXy',
+    port: 5432,
+    max: 10, // Adjust as needed for connection pooling
+  };
+
+  const postgresClient = new Client(databaseConfig); // Create a new client instance for the main function
 
   try {
     await postgresClient.connect();
