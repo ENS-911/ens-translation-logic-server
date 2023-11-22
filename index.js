@@ -4,11 +4,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const databaseConfig = {
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: 'ensclient',
+    host: 'ens-client.cfzb4vlbttqg.us-east-2.rds.amazonaws.com',
+    database: 'ens-client',
+    password: 'gQ9Sf8cIczKhZiCswXXy',
+    port: 5432,
   max: 10, // Adjust as needed for connection pooling
 };
 
