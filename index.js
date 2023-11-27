@@ -43,10 +43,12 @@ async function main() {
   const pool = new Pool({
     user: 'ensclient',
     host: 'ens-client.cfzb4vlbttqg.us-east-2.rds.amazonaws.com',
-    database: 'ens-client',
+    database: 'postgres',
     password: 'gQ9Sf8cIczKhZiCswXXy',
     port: 5432,
-  });
+    max: 20,
+    ssl: true,
+});
 
   try {
     const result = await pool.query('SELECT * FROM clients');
@@ -61,7 +63,7 @@ async function main() {
   }
 }
 
-exports.handler = async (event, context) => {
+module.exports.handler = async (event, context) => {
   try {
     await main();
     return { statusCode: 200, body: 'Execution completed.' };
