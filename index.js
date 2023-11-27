@@ -30,7 +30,6 @@ async function processDatabaseRow(row) {
     };
 
     try {
-
       const lambdaResponse = await lambda.invoke(lambdaParams).promise();
       console.log('Lambda Response:', lambdaResponse);
     } catch (error) {
@@ -49,19 +48,25 @@ async function main() {
     port: 5432,
   });
 
-
-  //const postgresClient = new Client(databaseConfig); // Create a new client instance for the main function
-
   try {
     const result = await pool.query('SELECT * FROM clients');
-        res.json(result.rows);
     await Promise.all(result.rows.map(processDatabaseRow));
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error);
+    // Rethrow the error or return a meaningful response
+    throw error;
+  } finally {
+    // Release the pool when done
+    pool.end();
   }
-};
+}
 
 exports.handler = async (event, context) => {
-  await main();
-  return { statusCode: 200, body: 'Execution completed.' };
+  try {
+    await main();
+    return { statusCode: 200, body: 'Execution completed.' };
+  } catch (error) {
+    console.error('Lambda execution error:', error);
+    return { statusCode: 500, body: 'Internal Server Error.' };
+  }
 };
