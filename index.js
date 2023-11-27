@@ -47,6 +47,9 @@ async function main() {
     password: 'gQ9Sf8cIczKhZiCswXXy',
     port: 5432,
     max: 10, // Adjust as needed for connection pooling
+    ssl: {
+      rejectUnauthorized: false, // Ignore unauthorized SSL errors (not recommended for production)
+    },
   };
 
   const postgresClient = new Client(databaseConfig); // Create a new client instance for the main function
