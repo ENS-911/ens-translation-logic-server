@@ -50,7 +50,7 @@ async function main() {
   });
 
 
-  const postgresClient = new Client(databaseConfig); // Create a new client instance for the main function
+  //const postgresClient = new Client(databaseConfig); // Create a new client instance for the main function
 
   try {
     const result = await pool.query('SELECT * FROM clients');
@@ -58,8 +58,6 @@ async function main() {
     await Promise.all(result.rows.map(processDatabaseRow));
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error);
-  } finally {
-    await postgresClient.end();
   }
 };
 
