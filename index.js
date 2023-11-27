@@ -47,7 +47,9 @@ async function main() {
     password: 'gQ9Sf8cIczKhZiCswXXy',
     port: 5432,
     max: 20,
-    ssl: true,
+    ssl: {
+      rejectUnauthorized: false, // Ignore unauthorized SSL errors (not recommended for production)
+  },
 });
 
   try {
