@@ -1,6 +1,7 @@
 const { Client } = require('pg');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
+const { Pool } = require('pg');
 dotenv.config();
 
 const lambdaConfig = {
@@ -40,31 +41,27 @@ async function processDatabaseRow(row) {
 }
 
 async function main() {
-  const databaseConfig = {
+  const pool = new Pool({
     user: 'ensclient',
     host: 'ens-client.cfzb4vlbttqg.us-east-2.rds.amazonaws.com',
     database: 'ens-client',
     password: 'gQ9Sf8cIczKhZiCswXXy',
     port: 5432,
-    max: 10, // Adjust as needed for connection pooling
-    ssl: {
-      rejectUnauthorized: false, // Ignore unauthorized SSL errors (not recommended for production)
-    },
-  };
+  });
+
 
   const postgresClient = new Client(databaseConfig); // Create a new client instance for the main function
 
   try {
-    await postgresClient.connect();
-
-    const queryResult = await postgresClient.query('SELECT * FROM clients');
-    await Promise.all(queryResult.rows.map(processDatabaseRow));
+    const result = await pool.query('SELECT * FROM clients');
+        res.json(result.rows);
+    await Promise.all(result.rows.map(processDatabaseRow));
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error);
   } finally {
     await postgresClient.end();
   }
-}
+};
 
 exports.handler = async (event, context) => {
   await main();
