@@ -4,8 +4,6 @@ const dotenv = require('dotenv');
 const { Pool } = require('pg');
 dotenv.config();
 
-console.log('call worked')
-
 const lambdaConfig = {
   region: process.env.AWS_REGION,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -61,6 +59,7 @@ async function main() {
 
   try {
     const result = await pool.query('SELECT * FROM clients WHERE dbsync = "active"');
+    console.log(result)
     await Promise.all(result.rows.map(processDatabaseRow));
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error);
