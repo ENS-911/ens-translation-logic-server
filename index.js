@@ -25,7 +25,7 @@ async function processDatabaseRow(row) {
 
   const { db_type, dbsync } = row;
 
-  if (dbsync.toLowerCase() === 'yes' && databaseTypeToLambdaMap.hasOwnProperty(db_type)) {
+  if (dbsync.toLowerCase() === 'active' && databaseTypeToLambdaMap.hasOwnProperty(db_type)) {
     const lambdaFunctionName = databaseTypeToLambdaMap[db_type];
     const lambdaParams = {
       FunctionName: lambdaFunctionName,
@@ -56,8 +56,8 @@ async function main() {
     max: 20,
     ssl: {
       rejectUnauthorized: false, // Ignore unauthorized SSL errors (not recommended for production)
-  },
-});
+    },
+  });
 
   try {
     const result = await pool.query('SELECT * FROM clients WHERE dbsync = "active"');
