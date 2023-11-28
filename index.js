@@ -61,7 +61,7 @@ async function main() {
 
   try {
     const result = await pool.query('SELECT * FROM clients WHERE dbsync = "active"');
-    await Promise.all(result.rows.map(processDatabaseRow()));
+    await Promise.all(result.rows.map(processDatabaseRow));
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error);
     // Rethrow the error or return a meaningful response
