@@ -58,7 +58,7 @@ async function main() {
   });
 
   try {
-    const result = await pool.query('SELECT * FROM clients WHERE dbsync = "active"');
+    const result = await pool.query('SELECT * FROM public.clients WHERE dbsync = "active"');
     console.log(result)
     await Promise.all(result.rows.map(processDatabaseRow));
   } catch (error) {
