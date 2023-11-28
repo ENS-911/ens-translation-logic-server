@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const { Pool } = require('pg');
 dotenv.config();
 
+console.log('call worked')
+
 const lambdaConfig = {
   region: process.env.AWS_REGION,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -19,6 +21,8 @@ const databaseTypeToLambdaMap = {
 };
 
 async function processDatabaseRow(row) {
+  console.log('Processing Row:', row);
+
   const { db_type, dbsync } = row;
 
   if (dbsync.toLowerCase() === 'yes' && databaseTypeToLambdaMap.hasOwnProperty(db_type)) {
@@ -28,6 +32,8 @@ async function processDatabaseRow(row) {
       InvocationType: 'RequestResponse',
       Payload: JSON.stringify(row),
     };
+
+    console.log('Lambda Parameters:', lambdaParams);
 
     try {
       const lambdaResponse = await lambda.invoke(lambdaParams).promise();
@@ -40,6 +46,7 @@ async function processDatabaseRow(row) {
 }
 
 async function main() {
+  console.log('main function called')
   const pool = new Pool({
     user: 'ensclient',
     host: 'ens-client.cfzb4vlbttqg.us-east-2.rds.amazonaws.com',
@@ -54,7 +61,7 @@ async function main() {
 
   try {
     const result = await pool.query('SELECT * FROM clients WHERE dbsync = "active"');
-    await Promise.all(result.rows.map(processDatabaseRow));
+    await Promise.all(result.rows.map(processDatabaseRow()));
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error);
     // Rethrow the error or return a meaningful response
