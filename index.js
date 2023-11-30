@@ -17,7 +17,6 @@ const databaseTypeToLambdaMap = {
 };
 
 async function processDatabaseRow(row) {
-  console.log('Processing Row:', row);
 
   const { db_type, dbsync } = row;
 
@@ -25,8 +24,10 @@ async function processDatabaseRow(row) {
     const lambdaFunctionName = databaseTypeToLambdaMap[db_type];
     
     try {
+      //const staticPayload = { key: 'value' };
       // Ensure row is a valid JSON before sending it
       const rowPayload = JSON.stringify(row);
+      //const rowPayload = JSON.stringify(staticPayload);
 
       const lambdaParams = {
         FunctionName: lambdaFunctionName,
