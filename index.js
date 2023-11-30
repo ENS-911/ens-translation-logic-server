@@ -23,19 +23,23 @@ async function processDatabaseRow(row) {
 
   if (dbsync.toLowerCase() === 'active' && databaseTypeToLambdaMap.hasOwnProperty(db_type)) {
     const lambdaFunctionName = databaseTypeToLambdaMap[db_type];
-    const lambdaParams = {
-      FunctionName: lambdaFunctionName,
-      InvocationType: 'RequestResponse',
-      Payload: JSON.stringify(row),
-    };
-
-    console.log('Lambda Parameters:', lambdaParams);
-
+    
     try {
+      // Ensure row is a valid JSON before sending it
+      const rowPayload = JSON.stringify(row);
+
+      const lambdaParams = {
+        FunctionName: lambdaFunctionName,
+        InvocationType: 'RequestResponse',
+        Payload: rowPayload,
+      };
+
+      console.log('Lambda Parameters:', lambdaParams);
+
       const lambdaResponse = await lambda.invoke(lambdaParams).promise();
       console.log('Lambda Response:', lambdaResponse);
     } catch (error) {
-      console.error('Error invoking Lambda function:', error);
+      console.error('Error processing row:', error);
       // Log the error and continue with the next row
     }
   }
