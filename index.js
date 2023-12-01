@@ -24,10 +24,53 @@ async function processDatabaseRow(row) {
     const lambdaFunctionName = databaseTypeToLambdaMap[db_type];
     
     try {
-      //const staticPayload = { key: 'value' };
+      const staticPayload = {
+    "id": "1",
+    "key": "9c44f764-fbf7-424c-820b-b954a7899acd",
+    "name": "Hamilton County 9-1-1",
+    "address": "3404 Amnicola Hwy",
+    "city": "Chattanooga",
+    "state": "TN",
+    "zip": "37406",
+    "plan": "silver",
+    "db_type": "mssql",
+    "agency_type": "agency_type",
+    "battalion": "battalion",
+    "db_city": "city",
+    "creation": "creation",
+    "crossstreets": "crossstreets",
+    "entered_queue": "entered_queue",
+    "db_id": "id",
+    "jurisdiction": "jurisdiction",
+    "latitude": "latitude",
+    "location": "location",
+    "longitude": "longitude",
+    "master_incident_id": "master_incident_id",
+    "premise": "premise",
+    "priority": "priority",
+    "sequencenumber": "sequencenumber",
+    "stacked": "stacked",
+    "db_state": "state",
+    "status": "status",
+    "statusdatetime": "statusdatetime",
+    "type": "type",
+    "type_description": "type_description",
+    "zone": "zone",
+    "raw_server": "database-911.cfzb4vlbttqg.us-east-2.rds.amazonaws.com",
+    "raw_user": "admin365",
+    "raw_pass": "MzmEG21PQSMDW4qXPsQF",
+    "trans_db_loc": "XX",
+    "raw_table": "hc911_db",
+    "phone_number": "423-622-1911",
+    "email": "info_911@hc911.org",
+    "website": "hc911.org",
+    "active": "inactive",
+    "dbsync": "active",
+    "raw_table_name": "active_incidents"
+};
       // Ensure row is a valid JSON before sending it
-      const rowPayload = JSON.stringify(row);
-      //const rowPayload = JSON.stringify(staticPayload);
+      //const rowPayload = JSON.stringify(row);
+      const rowPayload = JSON.stringify(staticPayload);
 
       const lambdaParams = {
         FunctionName: lambdaFunctionName,
