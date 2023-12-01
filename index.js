@@ -26,7 +26,7 @@ async function processDatabaseRow(row) {
     try {
       //const staticPayload = { key: 'value' };
       // Ensure row is a valid JSON before sending it
-      const rowPayload = JSON.parse(row);
+      const rowPayload = JSON.stringify(row);
       //const rowPayload = JSON.stringify(staticPayload);
 
       const lambdaParams = {
