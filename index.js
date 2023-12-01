@@ -26,7 +26,7 @@ async function processDatabaseRow(row) {
     try {
       //const staticPayload = { key: 'value' };
       // Ensure row is a valid JSON before sending it
-      const rowPayload = JSON.stringify(row);
+      const rowPayload = JSON.parse(row);
       //const rowPayload = JSON.stringify(staticPayload);
 
       const lambdaParams = {
@@ -36,7 +36,7 @@ async function processDatabaseRow(row) {
       };
 
       //console.log('Lambda Parameters:', lambdaParams);
-      console.log('Row Payload:', row);
+      console.log('Row Payload:', rowPayload);
 
       const lambdaResponse = await lambda.invoke(lambdaParams).promise();
       console.log('Lambda Response:', lambdaResponse);
