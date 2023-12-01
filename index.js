@@ -32,7 +32,7 @@ async function processDatabaseRow(row) {
       const lambdaParams = {
         FunctionName: lambdaFunctionName,
         InvocationType: 'RequestResponse',
-        Payload  : row,
+        Payload  : rowPayload,
       };
 
       //console.log('Lambda Parameters:', lambdaParams);
