@@ -69,9 +69,9 @@ async function processDatabaseRow(row) {
     "raw_table_name": "active_incidents"
 };
       // Ensure row is a valid JSON before sending it
-      //const rowPayload = JSON.stringify(row);
-      //const rowPayload = JSON.stringify(staticPayload);
-      const rowPayload = staticPayload;
+      const payload = JSON.parse(staticPayload);
+      const rowPayload = JSON.stringify(payload);
+      //const rowPayload = staticPayload;
 
       const lambdaParams = {
         FunctionName: lambdaFunctionName,
