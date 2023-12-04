@@ -70,7 +70,8 @@ async function processDatabaseRow(row) {
 };
       // Ensure row is a valid JSON before sending it
       //const rowPayload = JSON.stringify(row);
-      const rowPayload = JSON.stringify(staticPayload);
+      //const rowPayload = JSON.stringify(staticPayload);
+      const rowPayload = staticPayload;
 
       const lambdaParams = {
         FunctionName: lambdaFunctionName,
