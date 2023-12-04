@@ -24,7 +24,7 @@ async function processDatabaseRow(row) {
     const lambdaFunctionName = databaseTypeToLambdaMap[db_type];
     
     try {
-      const staticPayload = {
+  /*    const staticPayload = {
     "id": "1",
     "key": "9c44f764-fbf7-424c-820b-b954a7899acd",
     "name": "Hamilton County 9-1-1",
@@ -67,9 +67,9 @@ async function processDatabaseRow(row) {
     "active": "inactive",
     "dbsync": "active",
     "raw_table_name": "active_incidents"
-};
+};*/
       // Ensure row is a valid JSON before sending it
-      const rowPayload = JSON.stringify(staticPayload);
+      const rowPayload = JSON.stringify(row);
       //const rowPayload = JSON.parse(payload);
       //const rowPayload = staticPayload;
 
