@@ -79,8 +79,8 @@ async function processDatabaseRow(row) {
         Payload  : rowPayload,
       };
 
-      //console.log('Lambda Parameters:', lambdaParams);
-      console.log('Row Payload:', rowPayload);
+      console.log('Lambda Parameters:', lambdaParams);
+      //console.log('Row Payload:', rowPayload);
 
       const lambdaResponse = await lambda.invoke(lambdaParams).promise();
       console.log('Lambda Response:', lambdaResponse);
