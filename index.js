@@ -11,6 +11,8 @@ async function processAndInvokeSecondLambda(data) {
   // Prepare payload to send to the second Lambda
   const rowPayload = JSON.stringify(data);
 
+  console.log('Payload being sent to second Lambda:', rowPayload);
+
   const lambdaParams = {
     FunctionName: 'lambda_translator_mssql',  // Second Lambda function
     InvocationType: 'RequestResponse',        // Can be 'Event' for async invocation
