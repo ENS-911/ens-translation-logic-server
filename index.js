@@ -1,9 +1,7 @@
 const AWS = require('aws-sdk');
 const { Pool } = require('pg');
-const dotenv = require('dotenv');
-dotenv.config();
 
-const lambda = new AWS.Lambda({ region: process.env.AWS_REGION });
+const lambda = new AWS.Lambda({ region: "us-east-2" });
 
 async function processAndInvokeSecondLambda(data) {
   console.log('Processing row data:', data);
