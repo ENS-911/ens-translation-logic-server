@@ -13,7 +13,7 @@ async function processAndInvokeSecondLambda(data) {
 
   const lambdaParams = {
     FunctionName: 'lambda_translator_mssql',  // Second Lambda function
-    InvocationType: 'RequestResponse',        // Can be 'Event' for async invocation
+    InvocationType: 'Event',        // Can be 'Event' for async invocation or 'RequestResponse'
     Payload: rowPayload,                      // Pass the fetched data as a payload
   };
 
